@@ -2,7 +2,6 @@ package pages;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -53,7 +52,12 @@ public class LoginServlet extends HttpServlet {
 			if (user == null) {
 				writer.println("<h2> Invalid login. Please retry <a href='login.html'>Retry</a></h2>");
 			} else {
-				writer.println("<h2> Login successful, user details : " + user + "</h2>");
+//				writer.println("<h2> Login successful, user details : " + user + "</h2>");
+				
+				// WC: sends temporary redirect response
+				// RESPONSE : SC 302 | header : location = topics | body : EMPTY
+				// Web browser : Sends a NEW request
+				response.sendRedirect("topics");
 			}
 
 		} catch (Exception e) {
