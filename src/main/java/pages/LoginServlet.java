@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -54,8 +55,13 @@ public class LoginServlet extends HttpServlet {
 			} else {
 //				writer.println("<h2> Login successful, user details : " + user + "</h2>");
 				
+				// create and send cookie from server -> client in the response header
+				Cookie c1 = new Cookie("user_info", user.toString());
+
+				response.addCookie(c1);
+				
 				// WC: sends temporary redirect response
-				// RESPONSE : SC 302 | header : location = topics | body : EMPTY
+				// RESPONSE : SC 302 | header : location = topics, setCookie = user_info | body : EMPTY
 				// Web browser : Sends a NEW request
 				response.sendRedirect("topics");
 			}
