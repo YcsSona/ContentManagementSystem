@@ -19,6 +19,7 @@ public class TopicsServlet extends HttpServlet {
 
 		try (PrintWriter writer = response.getWriter()) {
 			writer.println("<h2> Login successful from topics page.</h2>");
+			writer.println("<h2> Email : " + request.getParameter("email") + "</h2>");
 		}
 	}
 
