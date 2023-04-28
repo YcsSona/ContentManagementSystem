@@ -12,8 +12,8 @@ import utility.DBUtils;
 
 public class TopicDaoImpl implements ITopicDao {
 
-	Connection connection;
-	PreparedStatement pst1;
+	private Connection connection;
+	private PreparedStatement pst1;
 
 	public TopicDaoImpl() throws SQLException {
 		connection = DBUtils.openConnection();
