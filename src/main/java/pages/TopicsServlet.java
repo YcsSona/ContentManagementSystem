@@ -7,14 +7,15 @@ import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import dao.ITopicDao;
 import dao.TopicDaoImpl;
 import entity.Topic;
+import entity.User;
 
 @WebServlet("/topics")
 public class TopicsServlet extends HttpServlet {
@@ -48,17 +49,17 @@ public class TopicsServlet extends HttpServlet {
 		try (PrintWriter writer = response.getWriter()) {
 			writer.println("<h2> Login successful from topics page.</h2>");
 
-			// get cookies from the request
-			Cookie[] cookies = request.getCookies();
+			// Get the session object from WC (provided cookies are enabled)
+			HttpSession session = request.getSession();
+			System.out.println("From topics page session new : " + session.isNew());
+			System.out.println(session.getId());
 
-			if (cookies != null) {
-				for (Cookie c : cookies) {
-					if (c.getName().equals("user_info")) {
-						writer.println("<h2> Validated user details retrieved from a cookie " + c.getValue() + "</h2>");
-						break;
-					}
-				}
+			// retrieve the user details from session scope
+			User user = (User) session.getAttribute("user_info");
 
+			if (user != null) {
+				writer.println("<h2> Retrieved user details from HttpSession " + user + "</h2>");
+				
 				List<Topic> topics = topicDao.getAllTopics();
 				topics.forEach(t -> {
 					writer.println("<h2>" + t.getTopicName() + "</h2>");

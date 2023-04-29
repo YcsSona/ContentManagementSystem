@@ -5,10 +5,10 @@ import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import dao.IUserDao;
 import dao.UserDaoImpl;
@@ -54,14 +54,18 @@ public class LoginServlet extends HttpServlet {
 				writer.println("<h2> Invalid login. Please retry <a href='login.html'>Retry</a></h2>");
 			} else {
 //				writer.println("<h2> Login successful, user details : " + user + "</h2>");
-				
-				// create and send cookie from server -> client in the response header
-				Cookie c1 = new Cookie("user_info", user.toString());
 
-				response.addCookie(c1);
-				
+				// create session object from WC
+				HttpSession session = request.getSession();
+				System.out.println("From login page session is new : " + session.isNew());
+				System.out.println(session.getId());
+
+				// save user details, under session scope
+				session.setAttribute("user_info", user);
+
 				// WC: sends temporary redirect response
-				// RESPONSE : SC 302 | header : location = topics, setCookie = user_info | body : EMPTY
+				// RESPONSE : SC 302 | header : location = topics, setCookie = user_info | body
+				// : EMPTY
 				// Web browser : Sends a NEW request
 				response.sendRedirect("topics");
 			}
