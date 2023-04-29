@@ -59,7 +59,7 @@ public class TopicsServlet extends HttpServlet {
 
 			if (user != null) {
 				writer.println("<h2> Retrieved user details from HttpSession " + user + "</h2>");
-				
+
 				List<Topic> topics = topicDao.getAllTopics();
 				topics.forEach(t -> {
 					writer.println("<h2>" + t.getTopicName() + "</h2>");
@@ -68,6 +68,9 @@ public class TopicsServlet extends HttpServlet {
 			} else {
 				writer.println("<h2> Session tracking failed : no cookies found!!!</h2>");
 			}
+
+			// send logout link to client
+			writer.println("<h2> <a href='logout'>Log me out.</a> </h2>");
 
 		} catch (Exception e) {
 			throw new ServletException("Error in doGet() of " + getClass(), e);
