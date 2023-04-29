@@ -25,14 +25,15 @@ public class TopicDaoImpl implements ITopicDao {
 	public List<Topic> getAllTopics() throws SQLException {
 		List<Topic> topics = new ArrayList<Topic>();
 
-		ResultSet rs = pst1.executeQuery();
-
-		while (rs.next()) {
-			topics.add(new Topic(rs.getInt(1), rs.getString(2)));
+		try (ResultSet rs = pst1.executeQuery()) {
+			while (rs.next()) {
+				topics.add(new Topic(rs.getInt(1), rs.getString(2)));
+			}
 		}
+
 		return topics;
 	}
-	
+
 	@Override
 	public void cleanUp() throws SQLException {
 		if (pst1 != null)
