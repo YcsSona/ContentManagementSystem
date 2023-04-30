@@ -58,12 +58,20 @@ public class TopicsServlet extends HttpServlet {
 			User user = (User) session.getAttribute("user_info");
 
 			if (user != null) {
-				writer.println("<h2> Retrieved user details from HttpSession " + user + "</h2>");
+				writer.println("<h2> Hello, " + user.getName() + "</h2>");
+				writer.println("<h3> All available topics </h3>");
 
 				List<Topic> topics = topicDao.getAllTopics();
+
+				writer.println("<form method='get' action='tutorials'>");
+				writer.println("<h3>");
 				topics.forEach(t -> {
-					writer.println("<h2>" + t.getTopicName() + "</h2>");
+					writer.println("<input type='radio' name='topic_id' value='" + t.getTopicId() + "'/>"
+							+ t.getTopicName() + "<br/>");
 				});
+				writer.println("</h3>");
+				writer.println("<input type='submit' value='Choose Topics'/>");
+				writer.println("</form>");
 
 			} else {
 				writer.println("<h2> Session tracking failed : no cookies found!!!</h2>");
