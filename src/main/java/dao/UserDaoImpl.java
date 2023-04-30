@@ -38,8 +38,6 @@ public class UserDaoImpl implements IUserDao {
 	public void cleanUp() throws SQLException {
 		if (pst1 != null)
 			pst1.close();
-		if (cn != null)
-			cn.close();
 		System.out.println("user dao cleaned up!");
 	}
 

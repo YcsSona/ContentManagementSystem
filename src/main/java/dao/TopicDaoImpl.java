@@ -38,8 +38,6 @@ public class TopicDaoImpl implements ITopicDao {
 	public void cleanUp() throws SQLException {
 		if (pst1 != null)
 			pst1.close();
-		if (connection != null)
-			connection.close();
 		System.out.println("topics dao cleaned up!");
 	}
 

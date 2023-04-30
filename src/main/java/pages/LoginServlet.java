@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import dao.IUserDao;
 import dao.UserDaoImpl;
 import entity.User;
+import utility.DBUtils;
 
 @WebServlet(value = "/authenticate", loadOnStartup = 1)
 public class LoginServlet extends HttpServlet {
@@ -33,6 +34,7 @@ public class LoginServlet extends HttpServlet {
 	public void destroy() {
 		try {
 			userDao.cleanUp();
+			DBUtils.closeConnection();
 		} catch (Exception e) {
 //			e.printStackTrace();
 			// how to inform WC that destroy() has failed?
