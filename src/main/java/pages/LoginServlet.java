@@ -10,7 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import dao.ITopicDao;
 import dao.IUserDao;
+import dao.TopicDaoImpl;
 import dao.UserDaoImpl;
 import entity.User;
 import utility.DBUtils;
@@ -19,10 +21,12 @@ import utility.DBUtils;
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private IUserDao userDao;
+	private ITopicDao topicDao;
 
 	public void init() throws ServletException {
 		try {
 			userDao = new UserDaoImpl();
+			topicDao = new TopicDaoImpl();
 		} catch (Exception e) {
 			// re-throw the exception back to WC, so that it doesn't continue the life
 			// cycle.
@@ -34,6 +38,7 @@ public class LoginServlet extends HttpServlet {
 	public void destroy() {
 		try {
 			userDao.cleanUp();
+			topicDao.cleanUp();
 			DBUtils.closeConnection();
 		} catch (Exception e) {
 //			e.printStackTrace();
@@ -64,7 +69,7 @@ public class LoginServlet extends HttpServlet {
 
 				// save user details, under session scope
 				session.setAttribute("user_info", user);
-
+				session.setAttribute("topic_dao", topicDao);
 				// WC: sends temporary redirect response
 				// RESPONSE : SC 302 | header : location = topics, setCookie = user_info | body
 				// : EMPTY
