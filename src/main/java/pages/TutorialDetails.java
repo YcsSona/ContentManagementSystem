@@ -42,6 +42,9 @@ public class TutorialDetails extends HttpServlet {
 			writer.println("<h2> Visits : " + tutorial.getVisits() + "</h2>");
 			writer.println("<h2> Contents : " + tutorial.getContents() + "</h2>");
 
+			// send back link to client
+			writer.println("<h2> <a href='tutorials?topic_id=" + tutorial.getTopicId() + "'>Back</a> </h2>");
+
 			// send logout link to client
 			writer.println("<h2> <a href='logout'>Log me out.</a> </h2>");
 
