@@ -24,19 +24,24 @@ public class TutorialsServlet extends HttpServlet {
 
 		try (PrintWriter writer = response.getWriter()) {
 
-			int topicId = Integer.parseInt(request.getParameter("topic_id"));
+			if (request.getParameter("topic_id") == null) {
+				writer.println("<h2 style='color:red'>You must choose a topic first</h2>");
+				writer.println("<h2><a href='topics'>Go back</a></h2>");
+			} else {
+				int topicId = Integer.parseInt(request.getParameter("topic_id"));
+				writer.println("<h2> Tutorials published under topic ID: " + topicId + "</h2>");
 
-			writer.println("<h2> Tutorials published under topic ID: " + topicId + "</h2>");
+				HttpSession session = request.getSession();
+				System.out.println("From tutorials page session new : " + session.isNew());
+				System.out.println(session.getId());
 
-			HttpSession session = request.getSession();
-			System.out.println("From tutorials page session new : " + session.isNew());
-			System.out.println(session.getId());
+				ITutorialDao tutorialDao = (TutorialsDaoImpl) session.getAttribute("tutorial_dao");
 
-			ITutorialDao tutorialDao = (TutorialsDaoImpl) session.getAttribute("tutorial_dao");
+				tutorialDao.getTutorialsByTopicId(topicId).forEach(tut -> {
+					writer.println("<h3> <a href='tutorial_details?tut_name=" + tut + "'>" + tut + "</a></h3>");
+				});
+			}
 
-			tutorialDao.getTutorialsByTopicId(topicId).forEach(tut -> {
-				writer.println("<h3> <a href='tutorial_details?tut_name=" + tut + "'>" + tut + "</a></h3>");
-			});
 		} catch (Exception e) {
 			throw new ServletException("Error in doGet() of " + getClass(), e);
 		}
