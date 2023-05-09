@@ -13,13 +13,15 @@ import utility.DBUtils;
 public class TutorialsDaoImpl implements ITutorialDao {
 
 	private Connection connection;
-	private PreparedStatement pst1, pst2, pst3;
+	private PreparedStatement pst1, pst2, pst3, pst4;
 
 	public TutorialsDaoImpl() throws SQLException {
 		connection = DBUtils.openConnection();
 		pst1 = connection.prepareStatement("select name from tutorials where topic_id=? order by visits desc");
 		pst2 = connection.prepareStatement("select * from tutorials where name=?");
 		pst3 = connection.prepareStatement("update tutorials set visits=visits+1 where id=?");
+		pst4 = connection.prepareStatement(
+				"insert into tutorials(name, author, publish_date, visits, contents, topic_id) values(?,?,?,?,?,?)");
 		System.out.println("tutorials dao created");
 	}
 
@@ -61,6 +63,25 @@ public class TutorialsDaoImpl implements ITutorialDao {
 		int result = pst3.executeUpdate();
 
 		return result == 1 ? "Updated visit count is : " + result : "Could not update the visit count";
+	}
+
+	@Override
+	public String addTutorial(Tutorial tutorial) throws SQLException {
+		// set IN parameters
+		pst4.setString(1, tutorial.getTutorialName());
+		pst4.setString(2, tutorial.getAuthor());
+		pst4.setDate(3, tutorial.getPublishDate());
+		pst4.setInt(4, tutorial.getVisits());
+		pst4.setString(5, tutorial.getContents());
+		pst4.setInt(6, tutorial.getTopicId());
+
+		int result = pst4.executeUpdate();
+
+		if (result == 1) {
+			return tutorial.getTutorialName() + " inserted successfully";
+		}
+		return "Could not insert the record";
+
 	}
 
 	@Override

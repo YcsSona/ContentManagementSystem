@@ -77,11 +77,18 @@ public class LoginServlet extends HttpServlet {
 				session.setAttribute("user_info", user);
 				session.setAttribute("topic_dao", topicDao);
 				session.setAttribute("tutorial_dao", tutorialDao);
-				// WC: sends temporary redirect response
-				// RESPONSE : SC 302 | header : location = topics, setCookie = user_info | body
-				// : EMPTY
-				// Web browser : Sends a NEW request
-				response.sendRedirect("topics");
+				
+				if (user.getRole().equals("customer")) {
+
+					// WC: sends temporary redirect response
+					// RESPONSE : SC 302 | header : location = topics, setCookie = JSESSIONID | body
+					// : EMPTY
+					// Web browser : Sends a NEW request
+					response.sendRedirect("topics");
+				} else {
+					// admin flow
+					response.sendRedirect("showform");
+				}
 			}
 
 		} catch (Exception e) {
