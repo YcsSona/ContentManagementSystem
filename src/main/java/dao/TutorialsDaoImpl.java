@@ -92,6 +92,8 @@ public class TutorialsDaoImpl implements ITutorialDao {
 			pst2.close();
 		if (pst3 != null)
 			pst3.close();
+		if (pst4 != null)
+			pst4.close();
 		System.out.println("tutorials dao cleaned up!");
 
 	}
